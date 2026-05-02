@@ -14,3 +14,14 @@ class TechnologyDraft(BaseModel):
 
     name: str
     degree_of_use: float = Field(ge=0.0, le=100.0, description="Degree of use, 0–100 %")
+
+
+class ProcessedDocumentDraft(BaseModel):
+    """Full result of the document processing pipeline — ready for DB persistence."""
+
+    file_name: str
+    original_text: str
+    translated_text: str
+    source_language: str
+    extracted_terms: list[DocTermDraft]
+    extracted_technologies: list[TechnologyDraft]

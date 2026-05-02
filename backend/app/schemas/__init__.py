@@ -1,3 +1,3 @@
-from app.schemas.document import DocTermDraft, TechnologyDraft
+from app.schemas.document import DocTermDraft, ProcessedDocumentDraft, TechnologyDraft
 
-__all__ = ["DocTermDraft", "TechnologyDraft"]
+__all__ = ["DocTermDraft", "TechnologyDraft", "ProcessedDocumentDraft"]
