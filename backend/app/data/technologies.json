@@ -1,0 +1,48 @@
+[
+  "Python", "JavaScript", "TypeScript", "Java", "C#", "C++", "C",
+  "Go", "Rust", "Ruby", "PHP", "Kotlin", "Swift", "Scala", "R",
+  "Dart", "Lua", "Perl", "Haskell", "Elixir", "F#", "Clojure",
+  "Julia", "Groovy", "Erlang",
+
+  "React", "Vue", "Angular", "Next.js", "Nuxt.js", "Svelte",
+  "Gatsby", "Remix", "Alpine.js", "jQuery",
+
+  "FastAPI", "Flask", "Django", "Express", "Fastify", "Spring Boot",
+  "Spring", "ASP.NET", "Laravel", "Symfony", "Rails", "NestJS",
+  "Gin", "Echo", "Fiber",
+
+  "PostgreSQL", "MySQL", "MongoDB", "Redis", "SQLite", "Oracle",
+  "Cassandra", "Elasticsearch", "DynamoDB", "Neo4j", "CockroachDB",
+  "MariaDB", "InfluxDB", "Firestore", "Supabase", "TimescaleDB",
+
+  "Docker", "Kubernetes", "Jenkins", "GitLab CI", "GitHub Actions",
+  "Terraform", "Ansible", "AWS", "Azure", "GCP", "Helm", "ArgoCD",
+  "CircleCI", "Prometheus", "Grafana", "Nginx", "Apache", "Vagrant",
+  "Pulumi", "Istio",
+
+  "TensorFlow", "PyTorch", "Keras", "scikit-learn", "Pandas", "NumPy",
+  "Hugging Face", "KeyBERT", "spaCy", "NLTK", "OpenCV", "LangChain",
+  "XGBoost", "LightGBM", "ONNX", "MLflow", "Weights & Biases",
+
+  "React Native", "Flutter", "SwiftUI", "Jetpack Compose",
+  "Ionic", "Xamarin", "Cordova",
+
+  "Kafka", "RabbitMQ", "Celery", "NATS", "ActiveMQ",
+
+  "GraphQL", "gRPC", "WebSocket", "REST API", "Protocol Buffers",
+  "OpenAPI", "JWT", "OAuth",
+
+  "SQLAlchemy", "Hibernate", "Prisma", "TypeORM", "Sequelize",
+  "Mongoose", "GORM", "Diesel",
+
+  "pytest", "Jest", "Mocha", "Cypress", "Selenium", "JUnit",
+  "Jasmine", "Vitest",
+
+  "Webpack", "Vite", "Babel", "ESLint", "Prettier", "Poetry", "pip",
+
+  "Git", "GitHub", "GitLab", "Bitbucket",
+
+  "Linux", "Ubuntu", "Debian", "CentOS",
+
+  "Postman", "Swagger", "Insomnia", "Hasura"
+]
