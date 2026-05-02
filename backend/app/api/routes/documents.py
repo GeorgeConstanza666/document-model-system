@@ -8,8 +8,8 @@ from sqlalchemy.orm import Session
 
 from app.core.database import get_db
 from app.models.document import AuthorContribution, Document, DocumentTechnology, DocumentTerm
-from app.models.author import Author
-from app.models.domain import Domain
+from app.models.author import Author, Specialist
+from app.models.domain import Dictionary, DictionaryEntry, Domain
 from app.models.technology import Technology
 from app.models.term import Term
 from app.schemas.document import ProcessedDocumentDraft
@@ -138,13 +138,15 @@ def finalize_document(
     db.add(doc)
     db.flush()
 
-    # Authors
+    # Authors — track IDs for Specialist creation
+    author_ids: list[int] = []
     for author_input in body.authors:
         author = db.query(Author).filter(Author.full_name == author_input.full_name).first()
         if author is None:
             author = Author(full_name=author_input.full_name, email=author_input.email)
             db.add(author)
             db.flush()
+        author_ids.append(author.id)
         contrib = AuthorContribution(
             document_id=doc.id,
             author_id=author.id,
@@ -152,7 +154,8 @@ def finalize_document(
         )
         db.add(contrib)
 
-    # Terms
+    # Terms — track IDs for DictionaryEntry creation
+    term_ids: list[int] = []
     terms_to_use = body.terms if body.terms else draft.extracted_terms
     for term_draft in terms_to_use:
         term = db.query(Term).filter(Term.text_en == term_draft.term).first()
@@ -160,6 +163,7 @@ def finalize_document(
             term = Term(text_en=term_draft.term)
             db.add(term)
             db.flush()
+        term_ids.append(term.id)
         doc_term = DocumentTerm(
             document_id=doc.id,
             term_id=term.id,
@@ -183,6 +187,27 @@ def finalize_document(
         )
         db.add(doc_tech)
 
+    # Specialists — get-or-create for each author
+    for author_id in author_ids:
+        if not db.query(Specialist).filter(Specialist.author_id == author_id).first():
+            db.add(Specialist(author_id=author_id))
+
+    # Dictionary — get-or-create for this domain
+    dictionary = db.query(Dictionary).filter(Dictionary.domain_id == domain.id).first()
+    if dictionary is None:
+        dictionary = Dictionary(domain_id=domain.id)
+        db.add(dictionary)
+        db.flush()
+
+    # DictionaryEntries — link each term to the dictionary if not already linked
+    for term_id in term_ids:
+        exists = db.query(DictionaryEntry).filter(
+            DictionaryEntry.dictionary_id == dictionary.id,
+            DictionaryEntry.term_id == term_id,
+        ).first()
+        if exists is None:
+            db.add(DictionaryEntry(dictionary_id=dictionary.id, term_id=term_id))
+
     db.commit()
     db.refresh(doc)
     del _drafts[draft_id]
@@ -193,7 +218,7 @@ def finalize_document(
 @router.get("", response_model=PaginatedDocuments)
 def list_documents(
     page: int = Query(1, ge=1),
-    page_size: int = Query(20, ge=1, le=100),
+    page_size: int = Query(20, ge=1, le=1000),
     db: Session = Depends(get_db),
 ) -> PaginatedDocuments:
     """Return a paginated list of all documents."""

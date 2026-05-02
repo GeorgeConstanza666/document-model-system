@@ -7,7 +7,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.core.database import engine
 from app.models import Base
-from app.api.routes import authors_router, documents_router, domains_router
+from app.api.routes import (
+    authors_router,
+    dictionaries_router,
+    documents_router,
+    domains_router,
+    specialists_router,
+)
 
 
 @asynccontextmanager
@@ -34,6 +40,8 @@ app.add_middleware(
 app.include_router(documents_router)
 app.include_router(domains_router)
 app.include_router(authors_router)
+app.include_router(specialists_router)
+app.include_router(dictionaries_router)
 
 
 @app.get("/")

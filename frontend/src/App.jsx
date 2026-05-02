@@ -8,7 +8,9 @@ import UploadDocumentPage from './pages/UploadDocumentPage'
 import DocumentsListPage from './pages/DocumentsListPage'
 import DocumentDetailsPage from './pages/DocumentDetailsPage'
 import SpecialistsPage from './pages/SpecialistsPage'
+import SpecialistDetailsPage from './pages/SpecialistDetailsPage'
 import DictionariesPage from './pages/DictionariesPage'
+import DictionaryDetailsPage from './pages/DictionaryDetailsPage'
 
 export default function App() {
   return (
@@ -21,7 +23,9 @@ export default function App() {
             <Route path="documents" element={<DocumentsListPage />} />
             <Route path="documents/:id" element={<DocumentDetailsPage />} />
             <Route path="specialists" element={<SpecialistsPage />} />
+            <Route path="specialists/:id" element={<SpecialistDetailsPage />} />
             <Route path="dictionaries" element={<DictionariesPage />} />
+            <Route path="dictionaries/:id" element={<DictionaryDetailsPage />} />
           </Route>
         </Routes>
       </BrowserRouter>

@@ -72,3 +72,50 @@ class AuthorResponse(BaseModel):
     id: int
     full_name: str
     email: Optional[str] = None
+
+
+# ── Specialist schemas ────────────────────────────────────────────────────────
+
+class SpecialistListItem(BaseModel):
+    id: int
+    author_id: int
+    full_name: str
+    email: Optional[str] = None
+    document_count: int
+    unique_term_count: int
+
+
+class SpecialistDocument(BaseModel):
+    id: int
+    file_name: Optional[str] = None
+    date: date
+    subject_area: str
+
+
+class SpecialistDetail(BaseModel):
+    id: int
+    author_id: int
+    full_name: str
+    email: Optional[str] = None
+    documents: list[SpecialistDocument]
+    unique_terms: list[str]
+
+
+# ── Dictionary schemas ────────────────────────────────────────────────────────
+
+class DictionaryListItem(BaseModel):
+    id: int
+    domain_name: str
+    entry_count: int
+
+
+class DictionaryTermEntry(BaseModel):
+    term_id: int
+    term: str
+    document_count: int
+
+
+class DictionaryDetail(BaseModel):
+    id: int
+    domain_name: str
+    entries: list[DictionaryTermEntry]
