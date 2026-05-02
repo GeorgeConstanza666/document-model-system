@@ -96,6 +96,8 @@ async def upload_document(file: UploadFile = File(...)) -> UploadResponse:
         processor = _get_processor()
         draft = processor.process(tmp_path)
         draft = draft.model_copy(update={"file_name": original_filename})
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
     finally:
         os.unlink(tmp_path)
 

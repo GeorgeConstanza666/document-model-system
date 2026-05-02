@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 
 import queryClient from './services/queryClient'
+import ErrorBoundary from './components/ErrorBoundary'
 import Layout from './components/Layout'
 import UploadDocumentPage from './pages/UploadDocumentPage'
 import DocumentsListPage from './pages/DocumentsListPage'
@@ -14,6 +15,7 @@ import DictionaryDetailsPage from './pages/DictionaryDetailsPage'
 
 export default function App() {
   return (
+    <ErrorBoundary>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
@@ -31,5 +33,6 @@ export default function App() {
       </BrowserRouter>
       <Toaster position="top-right" />
     </QueryClientProvider>
+    </ErrorBoundary>
   )
 }
