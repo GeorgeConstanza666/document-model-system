@@ -44,3 +44,6 @@ Thumbs.db
 # NLP models cache (root-level only, not backend/app/models)
 .cache/
 /models/
+
+# Generated test fixtures (recreated automatically by conftest.py)
+backend/tests/fixtures/
