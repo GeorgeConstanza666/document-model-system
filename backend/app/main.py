@@ -1,3 +1,4 @@
+import logging
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
@@ -5,6 +6,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+)
 from app.core.database import engine
 from app.models import Base
 from app.api.routes import (
@@ -13,6 +19,7 @@ from app.api.routes import (
     documents_router,
     domains_router,
     specialists_router,
+    terms_router,
 )
 
 
@@ -42,6 +49,7 @@ app.include_router(domains_router)
 app.include_router(authors_router)
 app.include_router(specialists_router)
 app.include_router(dictionaries_router)
+app.include_router(terms_router)
 
 
 @app.get("/")

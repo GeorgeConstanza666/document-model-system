@@ -3,6 +3,7 @@ from app.api.routes.dictionaries import router as dictionaries_router
 from app.api.routes.documents import router as documents_router
 from app.api.routes.domains import router as domains_router
 from app.api.routes.specialists import router as specialists_router
+from app.api.routes.terms import router as terms_router
 
 __all__ = [
     "authors_router",
@@ -10,4 +11,5 @@ __all__ = [
     "documents_router",
     "domains_router",
     "specialists_router",
+    "terms_router",
 ]

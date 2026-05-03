@@ -1,6 +1,7 @@
 import logging
 from pathlib import Path
 
+
 from app.schemas.document import ProcessedDocumentDraft
 from app.services.file_parser.factory import get_parser
 from app.services.nlp.technology_extractor import TechnologyExtractor
@@ -41,14 +42,21 @@ class DocumentProcessor:
 
         # Step 2 — detect language
         source_language = self.translator.detect_language(original_text)
-        logger.info("Detected language: %s", source_language)
+        logger.info("Detected language: '%s' (text length: %d chars)", source_language, len(original_text))
 
         # Step 3 — translate if needed
         if source_language == "en":
+            logger.info("Text already in English — skipping translation")
             translated_text = original_text
         else:
-            logger.info("Translating '%s' → English …", source_language)
+            logger.info("Translating %d chars '%s' → English …", len(original_text), source_language)
             translated_text = self.translator.translate(original_text, target_lang="en")
+            ukr_in_trans = sum(1 for c in translated_text if 1024 <= ord(c) <= 1279)
+            logger.info(
+                "Translation done. Result: %d chars, %.1f%% Cyrillic chars",
+                len(translated_text),
+                100 * ukr_in_trans / len(translated_text) if translated_text else 0,
+            )
 
         # Step 4 — extract terms
         extracted_terms = self.term_extractor.extract(translated_text)

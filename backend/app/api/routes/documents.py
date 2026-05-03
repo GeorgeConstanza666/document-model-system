@@ -57,6 +57,7 @@ def _build_doc_response(doc: Document) -> DocumentResponse:
             term=dt.term.text_en,
             q_term=dt.q_term,
             rel_freq_term=dt.rel_freq_term,
+            definition=dt.term.definition,
         )
         for dt in doc.document_terms
     ]

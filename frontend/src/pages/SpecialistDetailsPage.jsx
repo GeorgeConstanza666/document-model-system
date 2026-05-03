@@ -102,6 +102,29 @@ export default function SpecialistDetailsPage() {
           </div>
         )}
       </div>
+
+      {/* Unique technologies */}
+      <div className="border border-gray-200 rounded-lg overflow-hidden bg-white">
+        <div className="px-4 py-2.5 bg-gray-50 border-b border-gray-200">
+          <h2 className="text-sm font-semibold text-gray-700">
+            Технології ({spec.unique_technologies.length})
+          </h2>
+        </div>
+        {spec.unique_technologies.length === 0 ? (
+          <p className="px-4 py-3 text-sm text-gray-400">Технології відсутні</p>
+        ) : (
+          <div className="px-4 py-3 flex flex-wrap gap-2">
+            {spec.unique_technologies.map((tech) => (
+              <span
+                key={tech}
+                className="px-2.5 py-1 bg-blue-50 text-blue-700 text-xs rounded-full"
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   )
 }

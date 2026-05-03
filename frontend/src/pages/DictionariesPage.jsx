@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
 import api from '../services/api'
 
 async function fetchDictionaries() {
@@ -7,10 +9,44 @@ async function fetchDictionaries() {
   return data
 }
 
+function ConfirmDelete({ onConfirm, onCancel }) {
+  return (
+    <span className="flex items-center gap-2">
+      <button
+        onClick={onConfirm}
+        className="text-red-600 text-xs font-medium hover:underline"
+      >
+        Підтвердити
+      </button>
+      <button
+        onClick={onCancel}
+        className="text-gray-400 text-xs hover:text-gray-600"
+      >
+        Скасувати
+      </button>
+    </span>
+  )
+}
+
 export default function DictionariesPage() {
+  const queryClient = useQueryClient()
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null)
+
   const { data: dictionaries = [], isLoading } = useQuery({
     queryKey: ['dictionaries'],
     queryFn: fetchDictionaries,
+  })
+
+  const deleteMutation = useMutation({
+    mutationFn: (id) => api.delete(`/dictionaries/${id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['dictionaries'] })
+      toast.success('Словник видалено')
+      setConfirmDeleteId(null)
+    },
+    onError: (err) => {
+      toast.error(err?.response?.data?.detail ?? 'Не вдалося видалити словник')
+    },
   })
 
   return (
@@ -43,12 +79,27 @@ export default function DictionariesPage() {
                   <td className="px-4 py-2.5 text-gray-700 font-medium">{d.domain_name}</td>
                   <td className="px-4 py-2.5 text-center text-gray-600">{d.entry_count}</td>
                   <td className="px-4 py-2.5 text-right">
-                    <Link
-                      to={`/dictionaries/${d.id}`}
-                      className="text-blue-500 hover:text-blue-700 text-xs font-medium"
-                    >
-                      Деталі
-                    </Link>
+                    {confirmDeleteId === d.id ? (
+                      <ConfirmDelete
+                        onConfirm={() => deleteMutation.mutate(d.id)}
+                        onCancel={() => setConfirmDeleteId(null)}
+                      />
+                    ) : (
+                      <div className="flex items-center justify-end gap-3">
+                        <Link
+                          to={`/dictionaries/${d.id}`}
+                          className="text-blue-500 hover:text-blue-700 text-xs font-medium"
+                        >
+                          Деталі
+                        </Link>
+                        <button
+                          onClick={() => setConfirmDeleteId(d.id)}
+                          className="text-red-400 hover:text-red-600 text-xs"
+                        >
+                          Видалити
+                        </button>
+                      </div>
+                    )}
                   </td>
                 </tr>
               ))}

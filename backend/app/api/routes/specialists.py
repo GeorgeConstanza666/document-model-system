@@ -1,6 +1,6 @@
 """Specialist endpoints."""
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
@@ -44,6 +44,7 @@ def get_specialist(specialist_id: int, db: Session = Depends(get_db)) -> Special
     author = spec.author
     docs: list[SpecialistDocument] = []
     unique_terms: dict[int, str] = {}
+    unique_technologies: dict[int, str] = {}
 
     for contrib in author.contributions:
         doc = contrib.document
@@ -57,6 +58,8 @@ def get_specialist(specialist_id: int, db: Session = Depends(get_db)) -> Special
         )
         for dt in doc.document_terms:
             unique_terms[dt.term_id] = dt.term.text_en
+        for dtech in doc.document_technologies:
+            unique_technologies[dtech.technology_id] = dtech.technology.name
 
     return SpecialistDetail(
         id=spec.id,
@@ -65,4 +68,15 @@ def get_specialist(specialist_id: int, db: Session = Depends(get_db)) -> Special
         email=author.email,
         documents=docs,
         unique_terms=sorted(unique_terms.values()),
+        unique_technologies=sorted(unique_technologies.values()),
     )
+
+
+@router.delete("/{specialist_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_specialist(specialist_id: int, db: Session = Depends(get_db)) -> None:
+    """Delete a specialist record (the linked author and documents are kept)."""
+    spec = db.query(Specialist).filter(Specialist.id == specialist_id).first()
+    if spec is None:
+        raise HTTPException(status_code=404, detail="Спеціаліст не знайдений")
+    db.delete(spec)
+    db.commit()

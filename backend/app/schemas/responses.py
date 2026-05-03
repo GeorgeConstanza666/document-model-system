@@ -18,6 +18,7 @@ class DocTermResponse(BaseModel):
     term: str
     q_term: int
     rel_freq_term: float
+    definition: Optional[str] = None
 
 
 class DocTechResponse(BaseModel):
@@ -99,6 +100,7 @@ class SpecialistDetail(BaseModel):
     email: Optional[str] = None
     documents: list[SpecialistDocument]
     unique_terms: list[str]
+    unique_technologies: list[str]
 
 
 # ── Dictionary schemas ────────────────────────────────────────────────────────
@@ -113,6 +115,7 @@ class DictionaryTermEntry(BaseModel):
     term_id: int
     term: str
     document_count: int
+    definition: Optional[str] = None
 
 
 class DictionaryDetail(BaseModel):

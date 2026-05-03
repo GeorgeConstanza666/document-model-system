@@ -131,6 +131,9 @@ export default function DocumentDetailsPage() {
                 <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
                   Термін
                 </th>
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                  Визначення
+                </th>
                 <th className="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">
                   К-сть
                 </th>
@@ -143,6 +146,11 @@ export default function DocumentDetailsPage() {
               {sortedTerms.map((t) => (
                 <tr key={t.term_id} className="hover:bg-gray-50">
                   <td className="px-4 py-2 text-gray-700">{t.term}</td>
+                  <td className="px-4 py-2 text-gray-500 text-xs max-w-[220px]">
+                    {t.definition
+                      ? <span title={t.definition} className="line-clamp-2">{t.definition}</span>
+                      : <span className="text-gray-300 italic">—</span>}
+                  </td>
                   <td className="px-4 py-2 text-center text-gray-600">{t.q_term}</td>
                   <td className="px-4 py-2 text-center text-gray-600">
                     {t.rel_freq_term.toFixed(4)}
